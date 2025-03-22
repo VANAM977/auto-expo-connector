@@ -1,13 +1,23 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, User, Calendar, MapPin, Zap, LogIn } from 'lucide-react';
+import { Menu, X, User, Calendar, MapPin, Zap, LogIn, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { user, profile, signOut } = useAuth();
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -34,6 +44,13 @@ const Navbar = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
+
+  const getInitials = () => {
+    if (!profile) return 'U';
+    const first = profile.first_name ? profile.first_name.charAt(0) : '';
+    const last = profile.last_name ? profile.last_name.charAt(0) : '';
+    return (first + last).toUpperCase() || 'U';
+  };
 
   return (
     <nav
@@ -71,17 +88,53 @@ const Navbar = () => {
               ))}
             </div>
             <div className="flex items-center space-x-4">
-              <Link to="/login">
-                <Button variant="outline" size="sm" className="h-9 px-4">
-                  <LogIn className="mr-2 h-4 w-4" />
-                  Login
-                </Button>
-              </Link>
-              <Link to="/signup">
-                <Button size="sm" className="h-9 px-4">
-                  Get Started
-                </Button>
-              </Link>
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                      <Avatar>
+                        <AvatarImage src={profile?.avatar_url || ''} alt={profile?.first_name || 'User'} />
+                        <AvatarFallback>{getInitials()}</AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <div className="flex items-center justify-start gap-2 p-2">
+                      <div className="flex flex-col space-y-0.5 leading-none">
+                        <p className="font-medium text-sm">
+                          {profile?.first_name} {profile?.last_name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                      </div>
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="cursor-pointer">
+                        Profile Settings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <>
+                  <Link to="/auth/login">
+                    <Button variant="outline" size="sm" className="h-9 px-4">
+                      <LogIn className="mr-2 h-4 w-4" />
+                      Login
+                    </Button>
+                  </Link>
+                  <Link to="/auth/signup">
+                    <Button size="sm" className="h-9 px-4">
+                      Get Started
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
@@ -119,16 +172,33 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="border-t border-border pt-4 mt-2 grid grid-cols-2 gap-2">
-              <Link to="/login">
-                <Button variant="outline" size="sm" className="w-full">
-                  Login
-                </Button>
-              </Link>
-              <Link to="/signup">
-                <Button size="sm" className="w-full">
-                  Sign Up
-                </Button>
-              </Link>
+              {user ? (
+                <>
+                  <Link to="/profile">
+                    <Button variant="outline" size="sm" className="w-full">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </Button>
+                  </Link>
+                  <Button size="sm" className="w-full" onClick={() => signOut()}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/auth/login">
+                    <Button variant="outline" size="sm" className="w-full">
+                      Login
+                    </Button>
+                  </Link>
+                  <Link to="/auth/signup">
+                    <Button size="sm" className="w-full">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
