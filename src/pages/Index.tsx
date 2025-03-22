@@ -1,57 +1,27 @@
 
-import React, { useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
-import FeaturedEvents from '../components/FeaturedEvents';
-import TravelSection from '../components/TravelSection';
-import ChargingSection from '../components/ChargingSection';
-import TestimonialSection from '../components/TestimonialSection';
-import CallToAction from '../components/CallToAction';
-import Footer from '../components/Footer';
+import Hero from "@/components/Hero";
+import FeaturedEvents from "@/components/FeaturedEvents";
+import TravelSection from "@/components/TravelSection";
+import ChargingSection from "@/components/ChargingSection";
+import TestimonialSection from "@/components/TestimonialSection";
+import CallToAction from "@/components/CallToAction";
+import Footer from "@/components/Footer";
+import EventsApiDemo from "@/components/EventsApiDemo";
 
-const Index = () => {
-  useEffect(() => {
-    // Animation observer for revealing elements on scroll
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const revealElements = document.querySelectorAll('.reveal');
-    revealElements.forEach((el) => {
-      observer.observe(el);
-    });
-
-    // Cleanup
-    return () => {
-      revealElements.forEach((el) => {
-        observer.unobserve(el);
-      });
-    };
-  }, []);
-
+export default function Index() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      <main className="flex-grow">
-        <Hero />
-        <FeaturedEvents />
-        <TravelSection />
-        <ChargingSection />
-        <TestimonialSection />
-        <CallToAction />
-      </main>
-      
+    <div className="min-h-screen">
+      <Hero />
+      <FeaturedEvents />
+      <TravelSection />
+      <ChargingSection />
+      <div className="container mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold text-center mb-8">API Demo</h2>
+        <EventsApiDemo />
+      </div>
+      <TestimonialSection />
+      <CallToAction />
       <Footer />
     </div>
   );
-};
-
-export default Index;
+}

@@ -9,7 +9,329 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      accommodation_bookings: {
+        Row: {
+          booking_id: string | null
+          booking_reference: string | null
+          check_in_date: string
+          check_out_date: string
+          created_at: string
+          hotel_name: string
+          id: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          booking_id?: string | null
+          booking_reference?: string | null
+          check_in_date: string
+          check_out_date: string
+          created_at?: string
+          hotel_name: string
+          id?: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          booking_id?: string | null
+          booking_reference?: string | null
+          check_in_date?: string
+          check_out_date?: string
+          created_at?: string
+          hotel_name?: string
+          id?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accommodation_bookings_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "accommodation_bookings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bookings: {
+        Row: {
+          booking_date: string
+          created_at: string
+          event_id: string
+          id: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          booking_date?: string
+          created_at?: string
+          event_id: string
+          id?: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          booking_date?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      charging_bookings: {
+        Row: {
+          booking_date: string
+          created_at: string
+          duration_minutes: number
+          id: string
+          station_id: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          booking_date: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          station_id: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          booking_date?: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          station_id?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "charging_bookings_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "charging_stations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "charging_bookings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      charging_stations: {
+        Row: {
+          available_slots: number
+          created_at: string
+          id: string
+          location: string
+          name: string
+          price_per_unit: number
+          station_type: string
+          updated_at: string
+        }
+        Insert: {
+          available_slots?: number
+          created_at?: string
+          id?: string
+          location: string
+          name: string
+          price_per_unit: number
+          station_type: string
+          updated_at?: string
+        }
+        Update: {
+          available_slots?: number
+          created_at?: string
+          id?: string
+          location?: string
+          name?: string
+          price_per_unit?: number
+          station_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          created_at: string
+          description: string
+          end_date: string
+          id: string
+          image_url: string | null
+          location: string
+          organizer_id: string
+          price: number | null
+          start_date: string
+          status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          end_date: string
+          id?: string
+          image_url?: string | null
+          location: string
+          organizer_id: string
+          price?: number | null
+          start_date: string
+          status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          end_date?: string
+          id?: string
+          image_url?: string | null
+          location?: string
+          organizer_id?: string
+          price?: number | null
+          start_date?: string
+          status?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_organizer_id_fkey"
+            columns: ["organizer_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      travel_bookings: {
+        Row: {
+          arrival_location: string
+          arrival_time: string
+          booking_id: string | null
+          booking_reference: string | null
+          created_at: string
+          departure_location: string
+          departure_time: string
+          id: string
+          status: string | null
+          travel_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          arrival_location: string
+          arrival_time: string
+          booking_id?: string | null
+          booking_reference?: string | null
+          created_at?: string
+          departure_location: string
+          departure_time: string
+          id?: string
+          status?: string | null
+          travel_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          arrival_location?: string
+          arrival_time?: string
+          booking_id?: string | null
+          booking_reference?: string | null
+          created_at?: string
+          departure_location?: string
+          departure_time?: string
+          id?: string
+          status?: string | null
+          travel_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_bookings_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "travel_bookings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
