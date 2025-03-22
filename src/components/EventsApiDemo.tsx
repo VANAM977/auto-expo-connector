@@ -41,6 +41,7 @@ export const EventsApiDemo = () => {
   const fetchEventsViaEdgeFunction = async () => {
     setLoading(prev => ({ ...prev, edgeFunction: true }));
     try {
+      // Use the correct function name 'get-events' which matches our edge function name
       const response = await supabase.functions.invoke('get-events', {
         method: 'GET',
       });
