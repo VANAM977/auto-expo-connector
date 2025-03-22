@@ -1,4 +1,5 @@
 
+import React from "react";
 import Hero from "@/components/Hero";
 import FeaturedEvents from "@/components/FeaturedEvents";
 import TravelSection from "@/components/TravelSection";
