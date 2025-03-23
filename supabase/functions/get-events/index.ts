@@ -41,11 +41,23 @@ serve(async (req) => {
       }
     )
 
-    // Get query parameters
-    const url = new URL(req.url);
-    const eventId = url.searchParams.get('id');
-    const status = url.searchParams.get('status');
-    const limit = url.searchParams.get('limit') ? parseInt(url.searchParams.get('limit')!) : null;
+    // Get parameters from request
+    let eventId, status, limit;
+    
+    // Check request method to determine how to get parameters
+    if (req.method === 'GET') {
+      // For GET requests, use URL parameters
+      const url = new URL(req.url);
+      eventId = url.searchParams.get('id');
+      status = url.searchParams.get('status');
+      limit = url.searchParams.get('limit') ? parseInt(url.searchParams.get('limit')!) : null;
+    } else {
+      // For POST requests, use the request body
+      const body = await req.json().catch(() => ({}));
+      eventId = body.id;
+      status = body.status;
+      limit = body.limit;
+    }
     
     // Start the query
     let query = supabaseClient
@@ -55,7 +67,7 @@ serve(async (req) => {
     // Add filters based on parameters
     if (eventId) {
       // Fetch a specific event by ID
-      query = query.eq('id', eventId).single();
+      query = query.eq('id', eventId);
     } else {
       // Apply other filters
       if (status) {
@@ -72,7 +84,9 @@ serve(async (req) => {
     }
     
     // Execute the query
-    const { data, error } = await query;
+    const { data, error } = eventId 
+      ? await query.single() 
+      : await query;
     
     if (error) {
       console.error('Database error:', error);
