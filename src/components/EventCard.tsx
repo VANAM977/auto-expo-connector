@@ -1,9 +1,14 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CalendarDays, MapPin, Users, Clock } from 'lucide-react';
+import { CalendarDays, MapPin, Users, Clock, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+
+interface GuideInfo {
+  name: string;
+  avatar?: string;
+}
 
 interface EventCardProps {
   id: string;
@@ -14,6 +19,7 @@ interface EventCardProps {
   exhibitors: number;
   categories: string[];
   featured?: boolean;
+  guideInfo?: GuideInfo;
 }
 
 const EventCard = ({
@@ -25,6 +31,7 @@ const EventCard = ({
   exhibitors,
   categories,
   featured = false,
+  guideInfo,
 }: EventCardProps) => {
   return (
     <div 
@@ -65,6 +72,13 @@ const EventCard = ({
             <Users className="h-4 w-4 mr-2 flex-shrink-0" />
             <span>{exhibitors} Exhibitors</span>
           </div>
+          
+          {guideInfo && (
+            <div className="flex items-center text-sm text-muted-foreground">
+              <User className="h-4 w-4 mr-2 flex-shrink-0" />
+              <span>Guide: {guideInfo.name}</span>
+            </div>
+          )}
         </div>
         
         <div className="space-y-4">

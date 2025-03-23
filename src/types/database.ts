@@ -7,7 +7,7 @@ export interface User {
   email: string;
   first_name?: string;
   last_name?: string;
-  role: 'admin' | 'organizer' | 'owner' | 'visitor';
+  role: 'admin' | 'organizer' | 'guide' | 'visitor';
   created_at: string;
   updated_at: string;
 }
@@ -21,8 +21,26 @@ export interface Event {
   end_date: string;
   image_url?: string;
   organizer_id: string;
+  guide_id?: string;
+  guide_name?: string;
   price: number;
   status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+  latitude?: number;
+  longitude?: number;
+  featured?: boolean;
+}
+
+export interface Guide {
+  id: string;
+  name: string;
+  bio: string;
+  avatar_url?: string;
+  specialty: string;
+  languages: string[];
+  rating: number;
+  user_id: string;
   created_at: string;
   updated_at: string;
 }
@@ -74,6 +92,8 @@ export interface ChargingStation {
   price_per_unit: number;
   created_at: string;
   updated_at: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface ChargingBooking {

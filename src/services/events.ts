@@ -2,33 +2,28 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Event } from "@/types/database";
 
-export const getEvents = async (options?: { status?: string, limit?: number }): Promise<Event[]> => {
+interface EventOptions {
+  status?: string;
+  limit?: number;
+  upcoming?: boolean;
+  featured?: boolean;
+  guideId?: string;
+  nearLocation?: string;
+}
+
+export const getEvents = async (options?: EventOptions): Promise<Event[]> => {
   try {
-    let query = supabase
-      .from('events')
-      .select('*');
-    
-    // Apply filters if provided
-    if (options?.status) {
-      query = query.eq('status', options.status);
-    }
-    
-    // Apply ordering
-    query = query.order('start_date', { ascending: true });
-    
-    // Apply limit if provided
-    if (options?.limit) {
-      query = query.limit(options.limit);
-    }
-    
-    const { data, error } = await query;
+    const { data, error } = await supabase.functions.invoke('get-events', {
+      method: 'POST',
+      body: options || {}
+    });
     
     if (error) {
-      console.error('Error fetching events:', error);
+      console.error('Error invoking get-events function:', error);
       throw error;
     }
     
-    return data as Event[];
+    return data.events as Event[];
   } catch (error) {
     console.error('Error in getEvents:', error);
     throw error;
@@ -37,9 +32,8 @@ export const getEvents = async (options?: { status?: string, limit?: number }): 
 
 export const getEventById = async (id: string): Promise<Event | null> => {
   try {
-    // For single event retrieval, use the edge function for better performance
     const { data, error } = await supabase.functions.invoke('get-events', {
-      method: 'GET',
+      method: 'POST',
       body: { id }
     });
     
@@ -49,25 +43,8 @@ export const getEventById = async (id: string): Promise<Event | null> => {
     
     return (data.events && data.events.length > 0) ? data.events[0] : null;
   } catch (error) {
-    // Fallback to direct database query if edge function fails
-    console.warn('Edge function failed, falling back to direct query:', error);
-    
-    const { data, error: dbError } = await supabase
-      .from('events')
-      .select('*')
-      .eq('id', id)
-      .single();
-    
-    if (dbError) {
-      if (dbError.code === 'PGRST116') {
-        // PGRST116 means no rows returned, handle as not found
-        return null;
-      }
-      console.error('Error fetching event by ID:', dbError);
-      throw dbError;
-    }
-    
-    return data as Event;
+    console.error('Error in getEventById:', error);
+    throw error;
   }
 };
 

@@ -15,6 +15,10 @@ import ProfilePage from "./pages/auth/ProfilePage";
 import AuthCallback from "./pages/auth/AuthCallback";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import EventsPage from "./pages/events/EventsPage";
+import EventDetailsPage from "./pages/events/EventDetailsPage";
+import GuidesPage from "./pages/guides/GuidesPage";
+import GuideDetailsPage from "./pages/guides/GuideDetailsPage";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +36,10 @@ const App = () => (
             <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/events/:id" element={<EventDetailsPage />} />
+            <Route path="/guides" element={<GuidesPage />} />
+            <Route path="/guides/:id" element={<GuideDetailsPage />} />
             <Route path="/profile" element={
               <ProtectedRoute>
                 <ProfilePage />
