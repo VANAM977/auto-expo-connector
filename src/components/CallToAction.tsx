@@ -61,21 +61,32 @@ const CallToAction = () => {
               {
                 icon: CalendarDays,
                 label: "Event Booking",
+                image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=2070"
               },
               {
                 icon: MapPin,
                 label: "Travel Planning",
+                image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070"
               },
               {
                 icon: Zap,
                 label: "Charging Stations",
+                image: "https://images.unsplash.com/photo-1558424871-c0cc8c6d10b7?q=80&w=2070"
               },
               {
                 icon: Bell,
                 label: "Event Updates",
+                image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1983"
               }
             ].map((feature, index) => (
-              <div key={index} className="flex flex-col items-center reveal" style={{ transitionDelay: `${index * 100}ms` }}>
+              <div key={index} className="flex flex-col items-center reveal glass-panel p-3 rounded-xl overflow-hidden" style={{ transitionDelay: `${index * 100}ms` }}>
+                <div className="w-full h-24 mb-3 overflow-hidden rounded-lg">
+                  <img 
+                    src={feature.image} 
+                    alt={feature.label} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
                   <feature.icon className="h-6 w-6 text-primary" />
                 </div>

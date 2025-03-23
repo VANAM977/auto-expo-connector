@@ -38,7 +38,7 @@ const Hero = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center" 
           style={{ 
-            backgroundImage: 'url(https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?q=80&w=2942)', 
+            backgroundImage: 'url(https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070)', 
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-background/90" />
@@ -78,31 +78,42 @@ const Hero = () => {
               description: "Browse and book international auto expos with ease",
               icon: CalendarDays,
               delay: 0,
+              image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=2070"
             },
             {
               title: "Travel Planning",
               description: "Book flights, trains, hotels - all in one platform",
               icon: MapPin,
               delay: 100,
+              image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070"
             },
             {
               title: "Charging Stations",
               description: "Pre-book EV charging or fuel stations along your route",
               icon: Zap,
               delay: 200,
+              image: "https://images.unsplash.com/photo-1558424871-c0cc8c6d10b7?q=80&w=2070"
             },
             {
               title: "Networking",
               description: "Connect with industry professionals and enthusiasts",
               icon: Users,
               delay: 300,
+              image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070"
             },
           ].map((feature, index) => (
             <div 
               key={index}
-              className="glass-panel p-6 flex flex-col items-center text-center reveal"
+              className="glass-panel p-6 flex flex-col items-center text-center reveal rounded-xl overflow-hidden"
               style={{ transitionDelay: `${feature.delay}ms` }}
             >
+              <div className="w-full h-40 mb-4 overflow-hidden">
+                <img 
+                  src={feature.image} 
+                  alt={feature.title} 
+                  className="w-full h-full object-cover rounded-t-lg"
+                />
+              </div>
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                 <feature.icon className="h-6 w-6 text-primary" />
               </div>

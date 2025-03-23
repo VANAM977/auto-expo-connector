@@ -69,24 +69,35 @@ const ChargingSection = () => {
                 icon: Map,
                 title: "Station Locator",
                 description: "Find and filter charging/fuel stations along your route",
+                image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2076"
               },
               {
                 icon: CreditCard,
                 title: "Secure Payments",
                 description: "Pay in advance to guarantee availability upon arrival",
+                image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=2070"
               },
               {
                 icon: Zap,
                 title: "EV Compatibility",
                 description: "Filter by connector type and charging speed for your vehicle",
+                image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070"
               },
               {
                 icon: Fuel,
                 title: "Fuel Reservations",
                 description: "Pre-book fuel quantity and skip the lines at peak times",
+                image: "https://images.unsplash.com/photo-1544981037-4e5acdc51dbb?q=80&w=2070"
               }
             ].map((item, index) => (
-              <div key={index} className="glass-panel p-5">
+              <div key={index} className="glass-panel p-5 overflow-hidden">
+                <div className="w-full h-32 mb-4 overflow-hidden rounded-lg">
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                   <item.icon className="h-5 w-5 text-primary" />
                 </div>
