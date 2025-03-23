@@ -40,7 +40,7 @@ export const getEventById = async (id: string): Promise<Event | null> => {
     // For single event retrieval, use the edge function for better performance
     const { data, error } = await supabase.functions.invoke('get-events', {
       method: 'GET',
-      queryParams: {
+      query: {
         id: id
       }
     });
