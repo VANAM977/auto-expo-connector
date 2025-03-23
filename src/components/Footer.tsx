@@ -101,8 +101,20 @@ const Footer = () => {
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-muted-foreground" />
-                <a href="tel:+14155552671" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  +1 (415) 555-2671
+                <a href="tel:+917075649477" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Vanam Santosh: +91 7075649477
+                </a>
+              </li>
+              <li className="flex items-center space-x-3">
+                <Phone className="h-5 w-5 text-muted-foreground" />
+                <a href="tel:+919182065628" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Vallapi Shambhavi: +91 9182065628
+                </a>
+              </li>
+              <li className="flex items-center space-x-3">
+                <Phone className="h-5 w-5 text-muted-foreground" />
+                <a href="tel:+919505264456" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Saidala Ajay: +91 9505264456
                 </a>
               </li>
             </ul>
