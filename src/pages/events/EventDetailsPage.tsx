@@ -106,8 +106,8 @@ const EventDetailsPage = () => {
                 />
                 <Badge className="absolute top-4 left-4 text-sm" variant={
                   event.status === 'upcoming' ? 'default' :
-                  event.status === 'ongoing' ? 'success' :
-                  event.status === 'completed' ? 'secondary' : 
+                  event.status === 'ongoing' ? 'secondary' :
+                  event.status === 'completed' ? 'outline' : 
                   'destructive'
                 }>
                   {event.status.charAt(0).toUpperCase() + event.status.slice(1)}

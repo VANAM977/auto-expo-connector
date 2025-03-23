@@ -68,9 +68,9 @@ const EventMap: React.FC<EventMapProps> = ({
           ]
         };
         
-        const map = new google.maps.Map(mapRef.current, mapOptions);
+        const map = new window.google.maps.Map(mapRef.current, mapOptions);
         
-        new google.maps.Marker({
+        new window.google.maps.Marker({
           position: location,
           map,
           title
