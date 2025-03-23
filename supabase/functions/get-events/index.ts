@@ -30,6 +30,7 @@ serve(async (req) => {
   }
 
   try {
+    // Create a Supabase client with the request Authorization header
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
@@ -43,32 +44,47 @@ serve(async (req) => {
     // Get query parameters
     const url = new URL(req.url);
     const eventId = url.searchParams.get('id');
+    const status = url.searchParams.get('status');
+    const limit = url.searchParams.get('limit') ? parseInt(url.searchParams.get('limit')!) : null;
     
-    let events;
+    // Start the query
+    let query = supabaseClient
+      .from('events')
+      .select('*');
     
+    // Add filters based on parameters
     if (eventId) {
       // Fetch a specific event by ID
-      const { data, error } = await supabaseClient
-        .from('events')
-        .select('*')
-        .eq('id', eventId)
-        .single();
-      
-      if (error) throw error;
-      events = data;
+      query = query.eq('id', eventId).single();
     } else {
-      // Fetch all events
-      const { data, error } = await supabaseClient
-        .from('events')
-        .select('*')
-        .order('start_date', { ascending: true });
+      // Apply other filters
+      if (status) {
+        query = query.eq('status', status);
+      }
       
-      if (error) throw error;
-      events = data;
+      // Apply ordering
+      query = query.order('start_date', { ascending: true });
+      
+      // Apply limit if provided
+      if (limit) {
+        query = query.limit(limit);
+      }
     }
-
+    
+    // Execute the query
+    const { data, error } = await query;
+    
+    if (error) {
+      console.error('Database error:', error);
+      throw error;
+    }
+    
+    // Return the data
     return new Response(
-      JSON.stringify({ events }),
+      JSON.stringify({ 
+        events: eventId ? [data] : data,
+        count: Array.isArray(data) ? data.length : (data ? 1 : 0)
+      }),
       { 
         headers: { 
           'Content-Type': 'application/json',
@@ -77,7 +93,7 @@ serve(async (req) => {
       },
     )
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { 

@@ -5,12 +5,15 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Event } from "@/types/database";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { Loader2 } from "lucide-react";
 
 export const EventsApiDemo = () => {
   const [directEvents, setDirectEvents] = useState<Event[]>([]);
   const [edgeFunctionEvents, setEdgeFunctionEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState({ direct: false, edgeFunction: false });
   const { toast } = useToast();
+  const { session } = useAuth();
 
   const fetchDirectEvents = async () => {
     setLoading(prev => ({ ...prev, direct: true }));
@@ -41,13 +44,19 @@ export const EventsApiDemo = () => {
   const fetchEventsViaEdgeFunction = async () => {
     setLoading(prev => ({ ...prev, edgeFunction: true }));
     try {
-      // Use the correct function name 'get-events' which matches our edge function name
+      // Use the authenticated client to call the edge function
       const response = await supabase.functions.invoke('get-events', {
         method: 'GET',
+        headers: session?.access_token ? {
+          Authorization: `Bearer ${session.access_token}`,
+        } : undefined,
       });
       
       if (!response.data) throw new Error('No data returned from edge function');
+      
+      console.log('Edge function response:', response.data);
       setEdgeFunctionEvents(response.data.events as Event[]);
+      
       toast({
         title: "Edge Function Call Successful",
         description: `Retrieved ${response.data.events?.length || 0} events via the edge function.`,
@@ -56,7 +65,7 @@ export const EventsApiDemo = () => {
       console.error('Error fetching events via edge function:', error);
       toast({
         title: "Error",
-        description: "Failed to fetch events via the edge function.",
+        description: `Failed to fetch events via the edge function: ${error instanceof Error ? error.message : 'Unknown error'}`,
         variant: "destructive",
       });
     } finally {
@@ -64,6 +73,7 @@ export const EventsApiDemo = () => {
     }
   };
 
+  // Update the services/events.ts file to use the edge function for certain operations
   return (
     <div className="space-y-8">
       <Card>
@@ -80,7 +90,12 @@ export const EventsApiDemo = () => {
               onClick={fetchDirectEvents}
               disabled={loading.direct}
             >
-              {loading.direct ? "Loading..." : "Fetch Events Directly"}
+              {loading.direct ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : "Fetch Events Directly"}
             </Button>
             {directEvents.length > 0 && (
               <div className="border rounded-md p-4 mt-2">
@@ -99,7 +114,12 @@ export const EventsApiDemo = () => {
               disabled={loading.edgeFunction}
               variant="secondary"
             >
-              {loading.edgeFunction ? "Loading..." : "Fetch Events via Edge Function"}
+              {loading.edgeFunction ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : "Fetch Events via Edge Function"}
             </Button>
             {edgeFunctionEvents.length > 0 && (
               <div className="border rounded-md p-4 mt-2">
